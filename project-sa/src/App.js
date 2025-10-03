@@ -19,6 +19,7 @@ import Tax from './pages/TaxPage';
 
 //Login Protect
 import ProtectedRoute from "./components/ProtectRoute";
+import AddUser from './pages/AddUser';
 
 function AppLayout({ setIsLoggedIn }) {
   const location = useLocation();
@@ -37,7 +38,8 @@ function AppLayout({ setIsLoggedIn }) {
           <Route path="/report" element={<ProtectedRoute><Report /></ProtectedRoute>} />
           <Route path="/contract" element={<ProtectedRoute><Contract /></ProtectedRoute>} />
           <Route path="/tax" element={<ProtectedRoute><Tax /></ProtectedRoute>} />
-          <Route path="/adduser" element={<ProtectedRoute><UserManage /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><UserManage /></ProtectedRoute>} />
+          <Route path="/adduser" element={<ProtectedRoute><AddUser setIsLoggedIn={setIsLoggedIn} /></ProtectedRoute>} />
           
           <Route path="*" element={<NotFound />} />
         </Routes>
