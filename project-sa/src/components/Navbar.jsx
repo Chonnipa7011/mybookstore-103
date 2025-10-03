@@ -107,7 +107,7 @@ const Navbar = () => {
             </NavLink>
             
             <NavLink 
-              to="/adduser" 
+              to="/dashboard" 
               className={({ isActive }) => 
                 `text-gray-700 hover:text-blue-500 transition-colors font-medium ${
                   isActive ? 'text-blue-500 border-b-2 border-blue-500' : ''
