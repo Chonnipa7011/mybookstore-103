@@ -37,7 +37,7 @@ function AppLayout({ setIsLoggedIn }) {
           <Route path="/report" element={<ProtectedRoute><Report /></ProtectedRoute>} />
           <Route path="/contract" element={<ProtectedRoute><Contract /></ProtectedRoute>} />
           <Route path="/tax" element={<ProtectedRoute><Tax /></ProtectedRoute>} />
-          <Route path="/adduser" element={<ProtectedRoute><UserManage /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><UserManage /></ProtectedRoute>} />
           
           <Route path="*" element={<NotFound />} />
         </Routes>
