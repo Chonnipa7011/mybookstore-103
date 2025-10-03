@@ -14,7 +14,9 @@ import LeaveRest from './pages/LeaveRest';
 import Calendar from './pages/Calendar';
 import UserManage from './pages/UserManage';
 import Report from './pages/Report';
-import Contract from './pages/ContractPage';
+//import Contract from './pages/ContractPage';
+import ContractPageTest from "./pages/ContractPage/ContractPageTest";
+
 import Tax from './pages/TaxPage';
 
 //Login Protect
@@ -35,7 +37,7 @@ function AppLayout({ setIsLoggedIn }) {
           <Route path="/leave" element={<ProtectedRoute><LeaveRest /></ProtectedRoute>} />
           <Route path="/calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
           <Route path="/report" element={<ProtectedRoute><Report /></ProtectedRoute>} />
-          <Route path="/contract" element={<ProtectedRoute><Contract /></ProtectedRoute>} />
+          <Route path="/contract" element={<ProtectedRoute><ContractPageTest /></ProtectedRoute>} />
           <Route path="/tax" element={<ProtectedRoute><Tax /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><UserManage /></ProtectedRoute>} />
           
