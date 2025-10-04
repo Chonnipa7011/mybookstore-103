@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 //import BookCard from '../components/BookCard';
 //import LoadingSpinner from '../components/LoadingSpinner';
 //import './BookDetailPage.css';
+import { users } from '../data/userData'; // ดึง users จากไฟล์กลาง
 
 const UserManage = () => {
     const loggedInUser = JSON.parse(sessionStorage.getItem('user'));
@@ -16,12 +17,14 @@ const UserManage = () => {
                           <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
                           <p className="text-gray-600 mt-1">ยินดีต้อนรับ, {loggedInUser.name}</p>
                         </div>
-                        {/* <button
-                          onClick={}
-                          className="px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors duration-200"
-                        >
-                            เพิ่มบุคคล
-                        </button> */}
+                        <div className="items-center mt-8 p-6 bg-gray-50 rounded-lg">
+                        <Link to="/adduser" 
+                          className="inline-flex items-center justify-center px-8 py-3 bg-green-300 
+                            text-white font-semibold rounded-lg hover:bg-green-400 
+                            transform hover:scale-105 transition-all duration-200">
+                              เพิ่มบุคคล
+                        </Link>
+                      </div>
                       </div>
           
                       {/* ข้อมูลผู้ใช้และสิทธิ์ */}
@@ -83,14 +86,14 @@ const UserManage = () => {
                         </div>
                       </div>
           
-                      <div className="items-center mt-8 p-6 bg-gray-50 rounded-lg">
+                      {/* <div className="items-center mt-8 p-6 bg-gray-50 rounded-lg">
                         <Link to="/" 
                           className="inline-flex items-center justify-center px-8 py-3 bg-green-300 
                             text-white font-semibold rounded-lg hover:bg-green-400 
                             transform hover:scale-105 transition-all duration-200">
                               กลับสู่หน้าหลัก
                         </Link>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>

@@ -1,100 +1,127 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-//import BookCard from '../components/BookCard';
-//import LoadingSpinner from '../components/LoadingSpinner';
-//import './BookDetailPage.css';
+import React, { useState } from 'react';
+import {users, addUser } from '../data/userData';
+import { useNavigate } from 'react-router-dom';
 
 const AddUser = () => {
-    const loggedInUser = JSON.parse(sessionStorage.getItem('user'));
-    console.log(loggedInUser.role); // "hr" หรือ "manager"
-      return (
-          <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
-                  <div className="max-w-4xl mx-auto">
-                    <div className="bg-white rounded-2xl shadow-2xl p-8">
-                      <div className="flex justify-between items-center mb-8">
-                        <div>
-                          <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-                          <p className="text-gray-600 mt-1">ยินดีต้อนรับ, {loggedInUser.name}</p>
-                        </div>
-                        {/* <button
-                          onClick={}
-                          className="px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors duration-200"
-                        >
-                            เพิ่มบุคคล
-                        </button> */}
-                      </div>
-          
-                      {/* ข้อมูลผู้ใช้และสิทธิ์ */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-blue-50 p-6 rounded-lg border-2 border-blue-200">
-                          <h3 className="text-lg font-semibold text-blue-900 mb-4">ข้อมูลผู้ใช้</h3>
-                          <div className="space-y-2">
-                            <p className="text-gray-700"><span className="font-medium">ชื่อ:</span> {loggedInUser.name}</p>
-                            <p className="text-gray-700"><span className="font-medium">ชื่อผู้ใช้:</span> {loggedInUser.username}</p>
-                            <p className="text-gray-700"><span className="font-medium">อีเมล:</span> {loggedInUser.email}</p>
-                            <p className="text-gray-700">
-                              <span className="font-medium">บทบาท:</span>{' '}
-                              <span className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
-                                loggedInUser.role === 'hr' 
-                                  ? 'bg-purple-100 text-purple-800' 
-                                  : 'bg-green-100 text-green-800'
-                              }`}>
-                                {loggedInUser.role === 'hr' ? 'HR Admin' : 'Manager'}
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-          
-                        <div className="bg-green-50 p-6 rounded-lg border-2 border-green-200">
-                          <h3 className="text-lg font-semibold text-green-900 mb-4">สิทธิ์การเข้าถึง</h3>
-                          <div className="space-y-2">
-                            {loggedInUser.role === 'hr' ? (
-                              <>
-                                <p className="flex items-center text-gray-700">
-                                  <span className="text-green-600 mr-2">✓</span> จัดการข้อมูลพนักงาน
-                                </p>
-                                <p className="flex items-center text-gray-700">
-                                  <span className="text-green-600 mr-2">✓</span> เพิ่ม/ลบพนักงาน
-                                </p>
-                                <p className="flex items-center text-gray-700">
-                                  <span className="text-green-600 mr-2">✓</span> ดูรายงานทั้งหมด
-                                </p>
-                                <p className="flex items-center text-gray-700">
-                                  <span className="text-green-600 mr-2">✓</span> จัดการบัญชีผู้ใช้
-                                </p>
-                              </>
-                            ) : (
-                              <>
-                                <p className="flex items-center text-gray-700">
-                                  <span className="text-green-600 mr-2">✓</span> ดูข้อมูลพนักงาน
-                                </p>
-                                <p className="flex items-center text-gray-700">
-                                  <span className="text-green-600 mr-2">✓</span> แก้ไขข้อมูลพนักงาน
-                                </p>
-                                <p className="flex items-center text-gray-700">
-                                  <span className="text-green-600 mr-2">✓</span> ดูรายงานแผนก
-                                </p>
-                                <p className="flex items-center text-gray-700">
-                                  <span className="text-red-600 mr-2">✗</span> ลบพนักงาน
-                                </p>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-          
-                      <div className="items-center mt-8 p-6 bg-gray-50 rounded-lg">
-                        <Link to="/" 
-                          className="inline-flex items-center justify-center px-8 py-3 bg-green-300 
-                            text-white font-semibold rounded-lg hover:bg-green-400 
-                            transform hover:scale-105 transition-all duration-200">
-                              กลับสู่หน้าหลัก
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-      );
+  const navigate = useNavigate();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState('manager'); // default role
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const loggedInUser = JSON.parse(sessionStorage.getItem('user'));
+  // ตรวจสอบ HR ก่อนเพิ่ม
+  if (!loggedInUser || loggedInUser.role !== 'hr') {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-red-600 font-semibold text-lg">คุณไม่มีสิทธิ์เข้าถึงหน้านี้</p>
+      </div>
+    );
   }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    // Validate
+    if (!username || !password || !name || !email) {
+      setError('กรุณากรอกทุกช่อง');
+      return;
+    }
+
+    // ตรวจสอบ username ซ้ำ
+    const exists = users.find(u => u.username === username);
+    if (exists) {
+      setError('ชื่อผู้ใช้นี้มีอยู่แล้ว');
+      return;
+    }
+
+    // เพิ่ม user
+    addUser({ username, password, name, email, role });
+    setSuccess('เพิ่มผู้ใช้เรียบร้อยแล้ว!');
+
+    // Reset form
+    setUsername('');
+    setPassword('');
+    setName('');
+    setEmail('');
+    setRole('manager');
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-gray-800">เพิ่มผู้ใช้ใหม่</h2>
+
+        {error && <p className="mb-4 text-red-600">{error}</p>}
+        {success && <p className="mb-4 text-green-600">{success}</p>}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">ชื่อผู้ใช้</label>
+            <input
+              type="text"
+              className="w-full border px-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">รหัสผ่าน</label>
+            <input
+              type="password"
+              className="w-full border px-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">ชื่อ</label>
+            <input
+              type="text"
+              className="w-full border px-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+              value={name}
+              onChange={e => setName(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">อีเมล</label>
+            <input
+              type="email"
+              className="w-full border px-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">บทบาท</label>
+            <select
+              className="w-full border px-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+              value={role}
+              onChange={e => setRole(e.target.value)}
+            >
+              <option value="hr">HR</option>
+              <option value="manager">Manager</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            เพิ่มผู้ใช้
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 export default AddUser;
