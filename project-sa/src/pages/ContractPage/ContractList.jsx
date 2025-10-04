@@ -25,6 +25,11 @@ const ContractList = ({ contracts, onAdd, onView, onEdit, onDelete }) => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
+            {contracts.length === 0 && (
+              <tr>
+                <td colSpan="6" className="text-center py-4 text-gray-500">ไม่มีสัญญา</td>
+              </tr>
+            )}
             {contracts.map((c) => (
               <tr key={c.id}>
                 <td className="px-6 py-4">{c.employeeName}</td>
@@ -32,7 +37,9 @@ const ContractList = ({ contracts, onAdd, onView, onEdit, onDelete }) => {
                 <td className="px-6 py-4">{c.startDate} - {c.endDate}</td>
                 <td className="px-6 py-4">{c.salary.toLocaleString()} บาท</td>
                 <td className="px-6 py-4">
-                  <span className={`px-2 inline-flex text-xs rounded-full ${c.status === "active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
+                  <span className={`px-2 inline-flex text-xs rounded-full ${c.status === "active" 
+                    ? "bg-green-100 text-green-800" 
+                    : "bg-red-100 text-red-800"}`}>
                     {c.status === "active" ? "ใช้งาน" : "หมดอายุ"}
                   </span>
                 </td>
@@ -43,11 +50,6 @@ const ContractList = ({ contracts, onAdd, onView, onEdit, onDelete }) => {
                 </td>
               </tr>
             ))}
-            {contracts.length === 0 && (
-              <tr>
-                <td colSpan="6" className="text-center py-4 text-gray-500">ไม่มีสัญญา</td>
-              </tr>
-            )}
           </tbody>
         </table>
       </div>

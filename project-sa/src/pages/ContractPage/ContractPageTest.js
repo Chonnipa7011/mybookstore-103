@@ -2,28 +2,69 @@
 import React, { useState } from "react";
 import ContractList from "./ContractList";
 import ContractForm from "./ContractForm";
-import ContractDetail from "./ContractDetail";
-import ContractPrint from "./ContractPrint";
+import ContractView from "./ContractView";
 
 const ContractPage = () => {
-  // Mock data สำหรับพนักงาน
+  // ตัวอย่างพนักงานสอดคล้องกับ EmployeePage
   const employees = [
-    { id: 1, name: "Alice" },
-    { id: 2, name: "Bob" },
-    { id: 3, name: "Charlie" },
+    { id: 1, firstNameTh: "สมชาย", lastNameTh: "ใจดี" },
+    { id: 2, firstNameTh: "สาวิตรี", lastNameTh: "สุขใจ" },
+    { id: 3, firstNameTh: "อนุชา", lastNameTh: "พัฒนา" },
   ];
 
-  const [contracts, setContracts] = useState([]);
+  // แปลงชื่อเต็มสำหรับ select
+  const employeeOptions = employees.map(emp => ({
+    id: emp.id,
+    name: `${emp.firstNameTh} ${emp.lastNameTh}`
+  }));
+
+  // ตัวอย่างสัญญาที่สร้างแล้ว
+  const initialContracts = [
+    {
+      id: 1,
+      employeeId: 1,
+      employeeName: "สมชาย ใจดี",
+      type: "Full-time",
+      startDate: "2023-01-01",
+      endDate: "2023-12-31",
+      salary: 30000,
+      status: "active"
+    },
+    {
+      id: 2,
+      employeeId: 2,
+      employeeName: "สาวิตรี สุขใจ",
+      type: "Part-time",
+      startDate: "2023-02-01",
+      endDate: "2023-08-31",
+      salary: 15000,
+      status: "inactive"
+    }
+  ];
+
+  const [contracts, setContracts] = useState(initialContracts);
   const [selectedContract, setSelectedContract] = useState(null);
-  const [view, setView] = useState("list"); // list | add | edit | detail | print
+  const [view, setView] = useState("list"); // list | add | edit | detail
 
   const handleAdd = (contract) => {
-    setContracts([...contracts, { ...contract, id: Date.now() }]);
+    const emp = employees.find(e => e.id.toString() === contract.employeeId.toString());
+    setContracts([
+      ...contracts,
+      {
+        ...contract,
+        id: Date.now(),
+        employeeName: emp ? `${emp.firstNameTh} ${emp.lastNameTh}` : contract.employeeName
+      }
+    ]);
     setView("list");
   };
 
   const handleUpdate = (updated) => {
-    setContracts(contracts.map(c => (c.id === updated.id ? updated : c)));
+    const emp = employees.find(e => e.id.toString() === updated.employeeId.toString());
+    setContracts(contracts.map(c => c.id === updated.id ? { 
+      ...updated, 
+      employeeName: emp ? `${emp.firstNameTh} ${emp.lastNameTh}` : updated.employeeName
+    } : c));
     setView("list");
   };
 
@@ -47,7 +88,7 @@ const ContractPage = () => {
 
       {view === "add" && (
         <ContractForm
-          employees={employees}          // ส่ง employees ให้ Form
+          employees={employeeOptions}
           onSave={handleAdd}
           onCancel={() => setView("list")}
         />
@@ -55,7 +96,7 @@ const ContractPage = () => {
 
       {view === "edit" && selectedContract && (
         <ContractForm
-          employees={employees}          // ส่ง employees ให้ Form
+          employees={employeeOptions}
           contract={selectedContract}
           onSave={handleUpdate}
           onCancel={() => setView("list")}
@@ -63,16 +104,10 @@ const ContractPage = () => {
       )}
 
       {view === "detail" && selectedContract && (
-        <ContractDetail
+        <ContractView
           contract={selectedContract}
-          onBack={() => setView("list")}
-          onEdit={() => setView("edit")}
-          onPrint={() => setView("print")}
+          onClose={() => setView("list")}
         />
-      )}
-
-      {view === "print" && selectedContract && (
-        <ContractPrint contract={selectedContract} onBack={() => setView("list")} />
       )}
     </div>
   );
