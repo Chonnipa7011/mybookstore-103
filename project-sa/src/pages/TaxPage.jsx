@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MailIcon, PhoneIcon, LocationMarkerIcon, ClockIcon } from '@heroicons/react/outline';
-
+//tax
 const TaxPage = () => {
   // ข้อมูลพนักงานตัวอย่างจากฐานข้อมูล
   const employees = [
